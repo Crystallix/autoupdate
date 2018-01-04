@@ -30,10 +30,15 @@ class AutoUpdater
             $updates = "Missed updates:" . PHP_EOL;
 
             $isHistory = false;
+            $foundOldVer = false;
 
             foreach ($array as $line) {
                 if ($isHistory) {
-                    $updates .= str_replace('"', "", $line) . PHP_EOL;
+                    if ($foundOldVer)
+                        $updates .= str_replace('"', "", $line) . PHP_EOL;
+                    else
+                        if (strpos($line, $currentVersion . ":") !== false)
+                            $foundOldVer = true;
                 }
 
                 if (strpos($line, "history:") !== false) {
